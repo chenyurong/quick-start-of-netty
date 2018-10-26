@@ -1,10 +1,10 @@
 package com.chenshuyi.netty.bio;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
 
 /**
  * @auhotr Ron Chan
@@ -42,26 +42,11 @@ public class TimeServerHandler implements Runnable {
                         System.currentTimeMillis()).toString() : "BAD ORDER";
                 out.println(currentTime);
             }
-
         } catch (Exception e) {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-            }
-            if (out != null) {
-                out.close();
-                out = null;
-            }
-            if (this.socket != null) {
-                try {
-                    this.socket.close();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-                this.socket = null;
+            if (e instanceof SocketException) {
+                System.out.println("远程客户端已断开");
+            } else {
+                e.printStackTrace();
             }
         }
     }
