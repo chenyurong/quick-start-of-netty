@@ -2,6 +2,12 @@
 
 本项目是学习《Netty权威指南》的实践记录，只有实践才能更好地掌握知识。
 
+本项目目录：
+
+* [BIO 阻塞IO](#bioblock-io)
+* [NIO 非阻塞IO](#niono-block-io)
+* [NIO 异步IO](#niono-block-io)
+
 ## BIO（Block IO）
 
 BIO是最原始的IO通信方式，在这一小节通过使用 JDK BIO 提供的 API 实现了一个简单的时间服务器。
@@ -14,7 +20,7 @@ BIO是最原始的IO通信方式，在这一小节通过使用 JDK BIO 提供的
 
 NIO是实现了异步通信的通信方式，在这一小节通过 JDK NIO 的 API 实现了一个简单的时间服务器。
 
-详细代码可以查看：[BIO方式实现时间服务器](src/main/java/com/chenshuyi/netty/nio)
+详细代码可以查看：[NIO方式实现时间服务器](src/main/java/com/chenshuyi/netty/nio)
 
 这个例子很简单，分为两大部分：
 
@@ -36,4 +42,11 @@ NIO是实现了异步通信的通信方式，在这一小节通过 JDK NIO 的 A
 
 运行这个例子，直接运行 TimeServer 和 TimeClient 的 main 方法即可。
 
-##  
+##  AIO（Asynchronized IO）
+
+AIO相对于NIO，实现了真正的异步。因为NIO虽然可以不需调用线程等待，但是还是需要一个Selector线程一直在工作，并且在数据准备就绪之后，还是需要线程将数据从系统区间读取到用户区间，这段时间线程是阻塞的。
+
+AIO这部分代码相对来说比较难懂。TODO
+
+
+
