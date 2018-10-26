@@ -6,7 +6,7 @@
 
 * [BIO 阻塞IO](#bioblock-io)
 * [NIO 非阻塞IO](#niono-block-io)
-* [NIO 异步IO](#niono-block-io)
+* [NIO 异步IO](#aioasynchronized-io)
 
 ## BIO（Block IO）
 
