@@ -48,5 +48,50 @@ AIO相对于NIO，实现了真正的异步。因为NIO虽然可以不需调用�
 
 AIO这部分代码相对来说比较难懂。TODO
 
+## Netty实现
 
+具体代码见：[Netty默认实现时间服务器](src/main/java/com/chenshuyi/netty/basic)
+
+使用netty实现时间服务器非常简单，分为下面几个步骤：
+
+* 设置Bootstrap对象
+* 发起连接或绑定操作
+* 等待链路关闭
+
+其中 TimeClientHandler 和 ServerHandler 都继承了 ChannelHandlerAdapter 类，非常简单。但这种方式没有处理拆包和粘包问题，在高并发访问会出现问题。
+
+## Netty实现 —— 出现粘包拆包问题
+
+具体代码见：[Netty解决粘包拆包问题](src/main/java/com/chenshuyi/netty/frame/fault)
+
+上面的Netty默认实现只是一个请求，现在我们在客户端循环100个请求，会发现出现了粘包和拆包的问题。
+
+## Netty实现 —— 解决粘包拆包问题
+
+具体代码见：[Netty解决粘包拆包问题](src/main/java/com/chenshuyi/netty/frame/correct)
+
+这个示例与上一个的唯一区别是加了两个处理器（handler），即加了LineBasedFrameDecoder、StringDecoder。第一个Decoder会根据换行符和回车符分割数据，而第二个Decoder会将对象转成字符串。
+
+通过在处理链上加了这样两个Decoder，就解决了粘包和拆包问题。
+
+## Netty解码器 —— 分隔符解码器和定长解码器
+
+在Netty中有四种类型的解码器，分别是：
+
+* 定长解码器。接收到指定长度消息后，直接截断。
+* 回车换行作为结束标志。
+* 特殊的分隔符作为结束标志。
+* 在消息头定义长度字段来表示消息总长度。
+
+这里说的是使用分隔符以及定长来进行解码，分别对应：DelimiterBasedFrameDecoder和FixedLengthFrameDecoder。
+
+这两种方式和上面使用LineBasedFrameDecoder的方式一模一样，只不过是换了handler上的Decoder而已。
+
+* [DelimiterBasedFrameDecoder示例](src/main/java/com/chenshuyi/netty/frame/correct)
+
+运行EchoServer和EchoClient即可。
+
+* [FixedLengthFrameDecoder示例](src/main/java/com/chenshuyi/netty/frame/correct)
+
+运行EchoServer之后，启动命令行工具，telnet到对应的IP以及端口，之后输入字符串，EchoServer会截取前20个字符输出。
 
